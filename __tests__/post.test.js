@@ -62,11 +62,26 @@ describe('demo routes', () => {
       caption: 'Haha funny',
       tags: ['silly', 'meme']
     });
-    
+
     const res = await agent
       .get('/api/v1/posts');
 
     expect(res.body).toEqual([post1, post2]);
   });
 
+  it('gets a post by id', async() => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'picture',
+      caption: 'Look at this!',
+      tags: ['selfie', 'summer']
+    });
+      
+    const res = await agent
+      .get('/api/v1/posts/:id');
+
+    expect(res.body).toEqual(post);
+  });
 });
+
+
