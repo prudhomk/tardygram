@@ -3,6 +3,8 @@ import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
 
+
+
 describe('demo routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -12,13 +14,15 @@ describe('demo routes', () => {
     const res = await request(app)
       .post('/api/v1/auth/signup')
       .send({
-        enauk: 'test@test.com',
-        password: 'password'
+        email: 'test@test.com',
+        password: 'password',
+        profilePhotoUrl: expect.any(String)
       });
 
     expect(res.body).toEqual({
       id: '1',
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoUrl: expect.any(String)
     });
   });
 });
