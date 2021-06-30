@@ -63,7 +63,7 @@ describe('demo routes', () => {
       tags: ['silly', 'meme']
     });
 
-    const res = await agent
+    const res = await request(app)
       .get('/api/v1/posts');
 
     expect(res.body).toEqual([post1, post2]);
@@ -77,8 +77,24 @@ describe('demo routes', () => {
       tags: ['selfie', 'summer']
     });
       
-    const res = await agent
+    const res = await request(app)
       .get(`/api/v1/posts/${post.id}`);
+
+    expect(res.body).toEqual(post);
+  });
+
+  it('updates a post', async() => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'picture',
+      caption: 'placeholder',
+      tags: ['oops', 'sorry']
+    });
+
+    post.caption = 'new headshot';
+
+    const res = await agent
+      .patch(`/api/v1/posts/${post.id}`);
 
     expect(res.body).toEqual(post);
   });
