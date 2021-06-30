@@ -2,6 +2,7 @@ import pool from '../lib/utils/pool.js';
 import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
+import UserService from '../lib/services/UserService.js';
 
 const agent = request.agent(app);
 
@@ -26,19 +27,23 @@ describe('demo routes', () => {
     });
   });
 
-  it('login a user via POST', async() => {
+  it.only('login a user via POST', async() => {
+    const user = await UserService.create({
+      username: 'Billy',
+      password: 'password',
+      profilePhotoUrl: 'a'
+    });
     const res = await agent
       .post('/api/v1/auth/login')
       .send({
         username: 'Billy',
-        password:'password',
-        profilePhotoUrl: expect.any(String)
+        password:'password'
       });
 
     expect(res.body).toEqual({
-      id: '1',
-      username: 'Billy',
-      profilePhotoUrl: expect.any(String)
+      id: user.id,
+      username: user.username,
+      profilePhotoUrl: 'a'
     });
   });
 });
