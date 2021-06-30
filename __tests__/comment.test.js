@@ -4,6 +4,7 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 import Post from '../lib/models/Post.js';
+import Comment from '../lib/models/Comment.js';
 
 describe('demo routes', () => {
 
@@ -24,9 +25,6 @@ describe('demo routes', () => {
         username: 'Billy',
         password:'password'
       });
-   
-      
-    
   });
   
   it('creates a comment via POST', async() => {
@@ -56,4 +54,19 @@ describe('demo routes', () => {
     });
   });
 
+  it('deletes a comment', async() => {
+    const comment = await Comment.insert({
+      id: '1',
+      commentBy: user.id,
+      post: post.id,
+      comment: 'Wow!',
+    });
+
+    const res = await agent
+      .delete(`/api/v1/comments/${comment.id}`)
+      .send(comment);
+
+    expect(res.body).toEqual(comment);
+
+  });
 });
