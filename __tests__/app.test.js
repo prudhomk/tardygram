@@ -1,6 +1,6 @@
 import pool from '../lib/utils/pool.js';
 import setup from '../data/setup.js';
-import request, { agent } from 'supertest';
+import request from 'supertest';
 import app from '../lib/app.js';
 
 const agent = request.agent(app);
@@ -31,12 +31,14 @@ describe('demo routes', () => {
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        password:'password'
+        password:'password',
+        profilePhotoUrl: expect.any(String)
       });
 
     expect(res.body).toEqual({
       id: '1',
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoUrl: expect.any(String)
     });
   });
 });
