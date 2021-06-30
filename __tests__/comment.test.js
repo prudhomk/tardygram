@@ -55,6 +55,14 @@ describe('demo routes', () => {
   });
 
   it('deletes a comment', async() => {
+
+    post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'picture',
+      caption: 'Look at this!',
+      tags: ['selfie', 'summer']
+    });
+      
     const comment = await Comment.insert({
       id: '1',
       commentBy: user.id,
