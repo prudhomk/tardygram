@@ -92,9 +92,10 @@ describe('demo routes', () => {
     });
 
     post.caption = 'new headshot';
-
+    
     const res = await agent
-      .patch(`/api/v1/posts/${post.id}`);
+      .patch(`/api/v1/posts/${post.id}`)
+      .send({ caption: 'new headshot' });
 
     expect(res.body).toEqual(post);
   });
