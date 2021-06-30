@@ -99,6 +99,21 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual(post);
   });
+
+  it('deletes a post', async() => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'ugh',
+      tags: ['mistake', 'never again']
+    });
+
+    const res = await agent
+      .delete(`/api/v1/posts/${post.id}`)
+      .send(post);
+
+    expect(res.body).toEqual(post);
+  });
 });
 
 
