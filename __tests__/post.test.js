@@ -4,25 +4,43 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 
-const agent = request.agent(app);
+
 
 describe('demo routes', () => {
-  beforeEach(() => {
-    return setup(pool);
+
+  let user = {}; 
+  let agent;
+
+  beforeEach(async() => {
+    await setup(pool);
+    agent = await request.agent(app);
+    user = await UserService.create({
+      username: 'Billy',
+      password: 'password',
+      profilePhotoUrl: 'a'
+    });
+    await agent.post('/api/v1/auth/login')
+      .send({
+        username: 'Billy',
+        password:'password'
+      });
+    
   });
 
   it('creates a post via POST', async() => {
-    const res = await request(app)
+
+    const res = await agent
       .post('/api/v1/posts')
       .send({
-        user: 'Billy',
+        userId: user.id,
         photoUrl: 'picture',
         caption: 'Look at this!',
         tags: ['selfie', 'summer']
       });
 
     expect(res.body).toEqual({
-      user: 'Billy',
+      id: '1',
+      userId: user.id,
       photoUrl: 'picture',
       caption: 'Look at this!',
       tags: ['selfie', 'summer']

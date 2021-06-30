@@ -27,7 +27,7 @@ describe('demo routes', () => {
     });
   });
 
-  it.only('login a user via POST', async() => {
+  it('login a user via POST', async() => {
     const user = await UserService.create({
       username: 'Billy',
       password: 'password',
@@ -44,6 +44,30 @@ describe('demo routes', () => {
       id: user.id,
       username: user.username,
       profilePhotoUrl: 'a'
+    });
+  });
+
+  it('verify user logged in', async() => {
+    const agent = request.agent(app);
+    const user = await UserService.create({
+      username: 'Billy',
+      password: 'password',
+      profilePhotoUrl: 'a'
+    });
+    await agent.post('/api/v1/auth/login')
+      .send({
+        username: 'Billy',
+        password:'password'
+      });
+    const res = await agent.get('/api/v1/verify');
+    console.log(res.body);
+    expect(res.body).toEqual({
+      id: user.id,
+      username: 'Billy',
+      passwordHash: expect.any(String),
+      profilePhotoUrl: 'a',
+      iat: expect.any(Number),
+      exp: expect.any(Number)
     });
   });
 });
