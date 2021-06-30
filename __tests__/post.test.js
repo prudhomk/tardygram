@@ -4,7 +4,7 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 import Post from '../lib/models/Post.js';
-
+import Comment from '../lib/models/Comment.js';
 
 
 describe('demo routes', () => {
@@ -70,16 +70,24 @@ describe('demo routes', () => {
   });
 
   it('gets a post by id', async() => {
+    
     const post = await Post.insert({
       userId: user.id,
       photoUrl: 'picture',
       caption: 'Look at this!',
       tags: ['selfie', 'summer']
     });
-      
+
+    await Comment.insert({
+      id: '1',
+      commentBy: user.id,
+      post: post.id,
+      comment: 'Wow!',
+    });
+
+   
     const res = await request(app)
       .get(`/api/v1/posts/${post.id}`);
-
     expect(res.body).toEqual(post);
   });
 
@@ -115,83 +123,41 @@ describe('demo routes', () => {
     expect(res.body).toEqual(post);
   });
 
-  //   it('gets top 10 posts', async() => {
-  //     const post1 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'ugh',
-  //       tags: ['mistake', 'never again']
-  //     });
+  it('gets top 10 posts', async() => {
+    const post1 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'ugh',
+      tags: ['mistake', 'never again']
+    });
+    
+    await Comment.insert({
+      id: '1',
+      commentBy: user.id,
+      post: post1.id,
+      comment: 'Wow!',
+    });
 
-  //     const post2 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'no',
-  //       tags: ['stop', 'never again']
-  //     });
+    await Comment.insert({
+      id: '1',
+      commentBy: user.id,
+      post: post1.id,
+      comment: 'Wow!',
+    });
 
-  //     const post3 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'oh no',
-  //       tags: ['please', 'never again']
-  //     });
+    await Comment.insert({
+      id: '1',
+      commentBy: user.id,
+      post: post1.id,
+      comment: 'Wow!',
+    });
 
-  //     const post4 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'oh my',
-  //       tags: ['oops', 'never again']
-  //     });
+    const res = await request(app)
+      .get('/api/v1/posts/popular');
 
-  //     const post5 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'tee hee',
-  //       tags: ['whoops', 'never again']
-  //     });
+    expect(res.body[0]).toEqual(post1);
 
-  //     const post6 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'no more',
-  //       tags: ['CRUD', 'never again']
-  //     });
-
-  //     const post7 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'oog',
-  //       tags: ['oof', 'never again']
-  //     });
-
-  //     const post8 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'ugh',
-  //       tags: ['mistake', 'never again']
-  //     });
-
-  //     const post9 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'whatever',
-  //       tags: ['tag', 'never again']
-  //     });
-
-  //     const post10 = await Post.insert({
-  //       userId: user.id,
-  //       photoUrl: 'x',
-  //       caption: 'no more please',
-  //       tags: ['not', 'never again']
-  //     });
-
-  //     const res = await request(app)
-  //       .get('/api/v1/posts/popular');
-
-  //     expect(res.body).toEqual([post1, post2, post3, post4, post5, post6, post7, post8, post9, post10]);
-
-//   });
+  });
 });
 
 
