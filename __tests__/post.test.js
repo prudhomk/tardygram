@@ -3,6 +3,7 @@ import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
+import Post from '../lib/models/Post.js';
 
 
 
@@ -45,6 +46,27 @@ describe('demo routes', () => {
       caption: 'Look at this!',
       tags: ['selfie', 'summer']
     });
+  });
+
+  it('gets all posts', async() => {
+    const post1 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'picture',
+      caption: 'Look at this!',
+      tags: ['selfie', 'summer']
+    });
+
+    const post2 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'picture2',
+      caption: 'Haha funny',
+      tags: ['silly', 'meme']
+    });
+    
+    const res = await agent
+      .get('/api/v1/posts');
+
+    expect(res.body).toEqual([post1, post2]);
   });
 
 });
