@@ -114,6 +114,84 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual(post);
   });
+
+  it('gets top 10 posts', async() => {
+    const post1 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'ugh',
+      tags: ['mistake', 'never again']
+    });
+
+    const post2 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'no',
+      tags: ['stop', 'never again']
+    });
+
+    const post3 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'oh no',
+      tags: ['please', 'never again']
+    });
+
+    const post4 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'oh my',
+      tags: ['oops', 'never again']
+    });
+
+    const post5 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'tee hee',
+      tags: ['whoops', 'never again']
+    });
+
+    const post6 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'no more',
+      tags: ['CRUD', 'never again']
+    });
+
+    const post7 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'oog',
+      tags: ['oof', 'never again']
+    });
+
+    const post8 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'ugh',
+      tags: ['mistake', 'never again']
+    });
+
+    const post9 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'whatever',
+      tags: ['tag', 'never again']
+    });
+
+    const post10 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'x',
+      caption: 'no more please',
+      tags: ['not', 'never again']
+    });
+
+    const res = await request(app)
+      .get('/api/v1/posts/popular');
+
+    expect(res.body).toEqual([post1, post2, post3, post4, post5, post6, post7, post8, post9, post10]);
+
+  });
 });
 
 
