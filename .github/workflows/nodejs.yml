@@ -18,4 +18,5 @@ jobs:
       env:
         CI: true
         DATABASE_URL: postgres://alchemy:alchemy@postgres:5432/alchemy
-        {{ secrets.APP_SECRET }}
+        SALT_ROUNDS:${{secrets.SALT_ROUNDS}}
+        APP_SECRET:${{secrets.APP_SECRET}}
