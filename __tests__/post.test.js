@@ -88,7 +88,10 @@ describe('demo routes', () => {
    
     const res = await request(app)
       .get(`/api/v1/posts/${post.id}`);
-    expect(res.body).toEqual(post);
+    expect(res.body).toEqual({
+      ...post,
+      comments: ['Wow!']
+    });
   });
 
   it('updates a post', async() => {
